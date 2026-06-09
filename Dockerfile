@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libzip-dev \
     zlib1g-dev \
-    && docker-php-ext-install gd pdo pdo_mysql mysqli bcmath zip
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql mysqli bcmath intl zip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer (multi-stage)
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
