@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar en Línea - Hotel Maya Bay</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+    <nav>
+        <a href="Index.html">Inicio</a>
+        <a href="sobre-nosotros.html">Sobre Nosotros</a>
+        <a href="habitaciones.html">Habitaciones</a>
+        <a href="transporte.html">Transporte</a>
+        <a href="reservas.html">Reservar Ahora</a>
+    </nav>
+
+    <header class="banner-reservas">
+        <div class="overlay">
+            <h1>Reservaciones</h1>
+            <p>Planifique su estadía ideal y asegure su lugar en el paraíso</p>
+        </div>
+    </header>
+
+    <main class="reserva-container">
+        <form class="form-reserva" onsubmit="event.preventDefault(); alert('¡Gracias! Su solicitud de reserva ha sido recibida. Nos pondremos en contacto pronto.');">
+            <h2>Formulario de Reserva</h2>
+            
+            <label for="nombre">Nombre Completo</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre y Apellido" required>
+
+            <label for="correo">Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="correo@ejemplo.com" required>
+
+            <label for="telefono">Número de Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="+52 55 1234 5678" required>
+
+            <label for="habitacion">Tipo de Habitación</label>
+            <select id="habitacion" name="habitacion" required>
+                <option value="" disabled selected>Seleccione una habitación</option>
+                <option value="estandar">Habitación Estándar ($120/noche)</option>
+                <option value="familiar">Habitación Familiar ($180/noche)</option>
+                <option value="premium">Suite Premium ($280/noche)</option>
+            </select>
+
+            <label for="checkin">Fecha de Entrada (Check-in)</label>
+            <input type="date" id="checkin" name="checkin" required>
+
+            <label for="checkout">Fecha de Salida (Check-out)</label>
+            <input type="date" id="checkout" name="checkout" required>
+
+            <label for="transporte-solicitud">¿Requiere Servicio de Traslado?</label>
+            <select id="transporte-solicitud" name="transporte-solicitud">
+                <option value="no">No, gracias</option>
+                <option value="si-van">Sí, Van Ejecutiva (hasta 6 personas)</option>
+                <option value="si-auto">Sí, Auto de Lujo (hasta 3 personas)</option>
+            </select>
+
+            <button type="submit" class="btn">Confirmar y Enviar Reserva</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>📍Playa Maya Bay</p>
+        <p>📞 +52 55 73886630</p>
+        <p>✉ contacto@mayabay.com</p>
+        <p>© 2026 Maya Bay</p>
+    </footer>
+
+</body>
+</html>
