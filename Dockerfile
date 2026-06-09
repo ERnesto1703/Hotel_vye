@@ -15,6 +15,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd pdo pdo_mysql mysqli bcmath intl zip \
     && rm -rf /var/lib/apt/lists/*
 
+# Change Apache Document Root to public/ and enable mod_rewrite
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN a2enmod rewrite
+
 # Install Composer (multi-stage)
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
