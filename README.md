@@ -1,19 +1,21 @@
-# Hotel Maya Bay - Sistema de Reservaciones (Laravel)
+# Hotel Maya Bay - Sistema de Reservaciones y Traslados (Laravel 13)
 
-Este proyecto consiste en el sitio web dinámico para el **Hotel Maya Bay**, migrado desde un sitio estático a una aplicación web completa construida con el framework **Laravel 11**. Incluye lógica de persistencia de datos, un robusto sistema de validaciones en español y un algoritmo inteligente para gestionar el inventario y disponibilidad de habitaciones en tiempo real.
+Este proyecto consiste en el sitio web dinámico para el **Hotel Maya Bay**, construido con el framework **Laravel 13**. Incluye lógica de persistencia de datos relacionales, un robusto sistema de validaciones en español y un algoritmo transaccional inteligente para automatizar el agendamiento doble de habitaciones (40 habitaciones en total) y transporte de enlace (flota de 3 camionetas).
+
+Para consultar la documentación técnica completa, diccionario de datos, diagrama Entidad-Relación y guía de endpoints, por favor revisa el archivo:
+👉 **[DOCUMENTACION.md](file:///Users/ernestobautista/Downloads/Hotel1.1/DOCUMENTACION.md)**
 
 ---
 
 ## 🛠️ Tecnologías Utilizadas
 
-* **Framework Backend:** Laravel 11 (PHP 8.5+)
-* **Base de Datos:** SQLite (Motor ligero y autocontenido en `database/database.sqlite`)
-* **Motor de Plantillas:** Laravel Blade (Vistas dinámicas y reutilización de estructura)
-* **Frontend:** HTML5, CSS3 Nativo (Diseño responsivo y adaptado para dispositivos móviles)
+* **Framework Backend:** Laravel 13.x (PHP 8.4+)
+* **Base de Datos:** SQLite por defecto para desarrollo local (`database/database.sqlite`), con script SQL compatible para MySQL/MariaDB en `database/hotel_maya_bay.sql`.
+* **Diseño y Estilos:** HTML5, CSS3 Nativo (`public/css/estilo.css`) y componentes responsivos mediante **Bootstrap 5**.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📂 Estructura Principal del Proyecto
 
 Los archivos principales del proyecto se distribuyen de la siguiente manera:
 
@@ -21,124 +23,103 @@ Los archivos principales del proyecto se distribuyen de la siguiente manera:
 Hotel1.1/
   ├── app/
   │   ├── Http/Controllers/
-  │   │   └── BookingController.php      <-- Controlador principal (Validación, lógica e inventario)
+  │   │   └── BookingController.php      <-- Controlador principal (Lógica de reservas dobles e inventarios)
   │   └── Models/
-  │       ├── Room.php                    <-- Modelo de Habitación (Relación con Bookings)
-  │       └── Booking.php                 <-- Modelo de Reserva
+  │       ├── Habitacion.php             <-- Modelo de Habitación (40 en total)
+  │       ├── Camioneta.php              <-- Modelo de Camioneta (3 en total)
+  │       ├── ReservaHabitacion.php      <-- Modelo de Reserva de Habitación
+  │       └── ReservaTraslado.php        <-- Modelo de Reserva de Traslado
   ├── database/
-  │   ├── migrations/
-  │   │   ├── *_create_rooms_table.php    <-- Esquema de la tabla de habitaciones
-  │   │   └── *_create_bookings_table.php <-- Esquema de la tabla de reservas
-  │   ├── seeders/
-  │   │   ├── RoomSeeder.php              <-- Sembrador para 30 habitaciones iniciales
-  │   │   └── DatabaseSeeder.php          <-- Registro principal de seeders
-  │   └── database.sqlite                 <-- Archivo físico de la Base de Datos SQLite
+  │   ├── migrations/                    <-- Esquemas de tablas relacionales
+  │   ├── seeders/                       <-- Sembradores para habitaciones y camionetas
+  │   ├── database.sqlite                <-- Archivo físico de la Base de Datos SQLite local
+  │   └── hotel_maya_bay.sql             <-- Script SQL inicial para XAMPP/phpMyAdmin
   ├── public/
   │   ├── css/
-  │   │   └── estilo.css                  <-- Estilos globales de la web
-  │   └── img/                            <-- Imágenes del hotel (incluye assets premium generados)
+  │   │   └── estilo.css                  <-- Estilos personalizados del sitio
+  │   └── img/                            <-- Recursos e imágenes
   ├── resources/views/
   │   ├── layouts/
-  │   │   └── app.blade.php               <-- Estructura base común (Navegación y Footer)
-  │   ├── index.blade.php                 <-- Página de Inicio (Home)
-  │   ├── sobre-nosotros.blade.php        <-- Página "Sobre Nosotros"
-  │   ├── habitaciones.blade.php          <-- Catálogo con disponibilidad dinámica
+  │   │   └── app.blade.php               <-- Layout base común (Bootstrap y navegación)
+  │   ├── index.blade.php                 <-- Página de Inicio
+  │   ├── sobre-nosotros.blade.php        <-- Sección "Sobre Nosotros"
+  │   ├── habitaciones.blade.php          <-- Catálogo con disponibilidad dinámica hoy
   │   ├── transporte.blade.php            <-- Servicios de traslado y flota
-  │   └── reservas.blade.php              <-- Formulario de reserva con errores de validación
+  │   ├── reservas.blade.php              <-- Formulario de reserva con validaciones
+  │   └── admin.blade.php                 <-- Panel administrativo
   └── routes/
-      └── web.php                         <-- Definición de rutas URL
+      └── web.php                         <-- Definición de rutas y endpoints
 ```
 
 ---
 
 ## 🚀 Instalación y Puesta en Marcha
 
-Para ejecutar este proyecto en tu entorno local por primera vez, sigue estos pasos:
+Sigue estos sencillos pasos para ejecutar el proyecto en tu entorno local:
 
-### 1. Requisitos Previos
-Asegúrate de tener instalados en tu Mac:
-* **PHP** (versión 8.2 o superior)
-* **Composer** (gestor de dependencias de PHP)
-
-### 2. Instalar Dependencias
+### 1. Descargar dependencias
 Abre tu terminal en la carpeta raíz del proyecto y ejecuta:
 ```bash
 composer install
 ```
 
-### 3. Configurar Entorno
-El archivo de entorno `.env` ya viene configurado para usar SQLite. Si necesitas regenerar la clave de la aplicación o reconfigurarlo, asegúrate de que contenga:
+### 2. Configurar entorno
+Duplica el archivo de configuración `.env`:
+```bash
+cp .env.example .env
+```
+Por defecto, el archivo `.env` está configurado para usar SQLite (`DB_CONNECTION=sqlite`). Si deseas utilizar MySQL (por ejemplo, con XAMPP), configura las credenciales de base de datos en tu `.env`:
 ```env
-APP_NAME="Hotel Maya Bay"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost
-
-DB_CONNECTION=sqlite
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hotel_maya_bay
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
-### 4. Crear Base de Datos y Sembrar Datos (Seeding)
-Genera la base de datos vacía, crea las tablas y siembra las 30 habitaciones ejecutando:
+### 3. Generar la clave de la aplicación
+```bash
+php artisan key:generate
+```
+
+### 4. Inicializar Base de Datos (Migraciones y Sembrado)
+Crea las tablas relacionales y siembra el inventario de 40 habitaciones y 3 camionetas ejecutando:
 ```bash
 php artisan migrate:fresh --seed
 ```
+*También puedes hacerlo ingresando desde el navegador a la ruta de inicialización automática:*
+👉 `http://localhost:8000/instalar-bd-secreta`
 
-### 5. Iniciar Servidor de Desarrollo
-Levanta el servidor local de Laravel:
+### 5. Compilar assets de frontend (Bootstrap/Vite)
+```bash
+npm install
+npm run build
+```
+
+### 6. Levantar Servidor Local
+Inicia el servidor local de Laravel:
 ```bash
 php artisan serve
 ```
-Una vez iniciado, abre tu navegador y visita:
-👉 **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+Abre tu navegador e ingresa a: **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
 ---
 
-## 📝 Validaciones del Formulario de Reserva
+## 📝 Reglas de Negocio y Lógica de Agendamiento Doble
 
-El formulario cuenta con reglas de validación muy estrictas y configuradas con mensajes explicativos en español:
-
-* **Nombre Completo (`guest_name`):** Obligatorio. Utiliza expresiones regulares para permitir únicamente letras y espacios (bloquea cualquier número o símbolo especial).
-* **Correo Electrónico (`guest_email`):** Obligatorio. Debe tener formato de email válido y terminar estrictamente en `.com`.
-* **Número de Teléfono (`guest_phone`):** Obligatorio. Debe constar de **exactamente 10 dígitos numéricos** (no admite letras, espacios ni símbolos como `+` o `-` para simplificar la persistencia).
-* **Rango de Fechas:** 
-  * El check-in debe ser igual o posterior al día de hoy.
-  * El check-out debe ser posterior al check-in (evita reservas invertidas o de 0 noches).
-
----
-
-## 🛏️ Inventario y Lógica de Disponibilidad
-
-El hotel gestiona un inventario inicial fijo de **30 habitaciones** físicas (10 de cada categoría) creadas a través de `RoomSeeder`:
-* **Habitaciones Estándar:** Habitaciones de la 101 a la 110.
-* **Habitaciones Familiar:** Habitaciones de la 201 a la 210.
-* **Suites Premium:** Suites de la 301 a la 310.
-
-### Algoritmo de Disponibilidad en Tiempo Real:
-1. **Asignación Libre de Cruces:** Cuando un usuario intenta reservar, el sistema verifica las 10 habitaciones correspondientes a la categoría elegida. Se comprueba si las fechas solicitadas se solapan con reservas preexistentes (`check_in < check_out_solicitado` y `check_out > check_in_solicitado`). Si encuentra una habitación libre de solapamientos, confirma la reserva asociándola a esa habitación.
-2. **Cálculo de Siguiente Fecha Disponible:** Si las 10 habitaciones de una categoría están ocupadas hoy, la interfaz en `habitaciones.blade.php` cambia automáticamente el estado a **"Ocupado hoy"**. Internamente, el controlador realiza un recorrido inteligente buscando la fecha de finalización de la reserva activa más próxima de todas las habitaciones del tipo afectado para indicarle al cliente cuándo se liberará la primera habitación (ej. *"Siguiente disponible: DD/MM/AAAA"*).
-
----
-
-## 📊 Consulta a la Base de Datos
-
-Si deseas verificar el contenido de las tablas de base de datos (`rooms` o `bookings`), tienes tres métodos sencillos:
-
-### 1. Laravel Tinker (Terminal)
-Entra a la terminal interactiva de Laravel:
-```bash
-php artisan tinker
-```
-Ejecuta comandos de Eloquent:
-```php
-// Ver todas las reservaciones
-App\Models\Booking::all();
-
-// Ver todas las habitaciones y sus tipos
-App\Models\Room::all();
-```
-
-### 2. Extensión "SQLite Viewer" en VS Code
-Si utilizas VS Code, instala la extensión **SQLite Viewer**. Luego, simplemente haz clic en el archivo `database/database.sqlite` en tu explorador de archivos para ver y filtrar los datos de forma visual.
-
-### 3. Clientes Gráficos Externos
-Puedes descargar herramientas gratuitas como **TablePlus** o **DB Browser for SQLite** y arrastrar el archivo `database/database.sqlite` para explorar las tablas a través de una interfaz SQL tradicional.
+1. **Habitaciones (40 en total):**
+   * **15 Estándar** (Habitación 101 a 115) - $120.00
+   * **15 Familiar** (Habitación 201 a 215) - $180.00
+   * **10 Premium/Suites** (Suite 301 a 310) - $280.00
+   * El sistema busca una habitación libre para las fechas seleccionadas evitando cualquier cruce de reservas preexistentes.
+2. **Camionetas (3 de traslado):**
+   * Placa `ABC-123` (capacidad de 6 pasajeros)
+   * Placa `DEF-456` (capacidad de 8 pasajeros)
+   * Placa `GHI-789` (capacidad de 10 pasajeros)
+   * Si el huésped marca "Desea traslado", el sistema valida que la suma de pasajeros de los servicios ya agendados en ese mismo horario más los pasajeros solicitados no supere la capacidad máxima de cada camioneta. Asigna de forma automática el transporte disponible.
+3. **Validaciones en Español:**
+   * Nombre completo (solo letras y espacios).
+   * Correo (debe terminar en `.com`).
+   * Teléfono (debe tener exactamente 10 dígitos numéricos).
+   * Rango de fechas coherente (check-in >= hoy y check-out > check-in).
