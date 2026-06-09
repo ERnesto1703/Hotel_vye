@@ -22,8 +22,8 @@ COPY . /var/www/html
 # Install PHP dependencies (no dev)
 RUN composer install --no-dev --optimize-autoloader
 
-# Cache Laravel config, routes and views
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
+# Skipping config, route and view cache during build (handled at runtime)
+# RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
 
 # Set proper permissions for storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
