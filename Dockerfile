@@ -42,5 +42,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 80 (default for Apache)
 EXPOSE 80
 
-# Start Apache in foreground
-CMD ["apache2-foreground"]
+# Start Apache in foreground, running migrations first
+CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
