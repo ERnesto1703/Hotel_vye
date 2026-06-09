@@ -32,8 +32,8 @@ COPY . /var/www/html
 
 # Create empty SQLite database and ensure correct permissions
 RUN touch /var/www/html/database/database.sqlite \
-    && chown www-data:www-data /var/www/html/database/database.sqlite \
-    && chmod 777 /var/www/html/database/database.sqlite
+    && chown -R www-data:www-data /var/www/html/database \
+    && chmod -R 777 /var/www/html/database
 
 # Install PHP dependencies (no dev)
 RUN composer install --no-dev --optimize-autoloader
