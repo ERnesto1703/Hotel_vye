@@ -22,7 +22,7 @@
         <h2 style="text-align: center; color: #004d66; margin-bottom: 30px;">Nuestra Flota</h2>
         <div class="vehiculos">
             <div class="card">
-                <img src="{{ asset('img/Transportes.jpg') }}" alt="Van Ejecutiva">
+                <img src="{{ asset('img/Van_fam.jpg') }}" alt="Van Familiar">
                 <div class="card-content">
                     <h3>Van Ejecutiva</h3>
                     <p style="margin-top: 10px; color: #666;">Espaciosa y cómoda, ideal para familias y grupos de hasta 6 personas con equipaje.</p>
@@ -30,10 +30,18 @@
             </div>
 
             <div class="card">
-                <img src="{{ asset('img/Taxi.png') }}" alt="Auto de Lujo">
+                <img src="{{ asset('img/Van_eje.png') }}" alt="Van Ejecutiva">
                 <div class="card-content">
                     <h3>Auto de Lujo</h3>
-                    <p style="margin-top: 10px; color: #666;">Vehículo elegante de gama alta para hasta 3 pasajeros. Perfecto para parejas y viajeros de negocios.</p>
+                    <p style="margin-top: 10px; color: #666;">Van para hasta 8 pasajeros con aire acondicionado y la mas alta calidad para su viaje.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="{{ asset('img/Van_lujo.png') }}" alt="Van de Lujo">
+                <div class="card-content">
+                    <h3>Auto de Lujo</h3>
+                    <p style="margin-top: 10px; color: #666;">Transporte de hasta 10 pasajeros viaje placentero y seguro en la van de mayor lujo.</p>
                 </div>
             </div>
         </div>
