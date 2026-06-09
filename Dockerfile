@@ -30,6 +30,11 @@ WORKDIR /var/www/html
 # Copy application source
 COPY . /var/www/html
 
+# Create empty SQLite database and ensure correct permissions
+RUN touch /var/www/html/database/database.sqlite \
+    && chown www-data:www-data /var/www/html/database/database.sqlite \
+    && chmod 777 /var/www/html/database/database.sqlite
+
 # Install PHP dependencies (no dev)
 RUN composer install --no-dev --optimize-autoloader
 
@@ -43,5 +48,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 80 (default for Apache)
 EXPOSE 80
 
-# Start Apache in foreground, running migrations first (non-blocking)
-CMD ["sh", "-c", "php artisan migrate --force; apache2-foreground"]
+# Start Apache in foreground, running migrations and seeders first (non-blocking)
+CMD ["sh", "-c", "php artisan migrate --seed --force; apache2-foreground"]

@@ -15,11 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $this->call([
-            HabitacionSeeder::class,
-            CamionetaSeeder::class,
-        ]);
+        // Only seed if Habitacion table is empty
+        if (\App\Models\Habitacion::count() === 0) {
+            $this->call([
+                HabitacionSeeder::class,
+                CamionetaSeeder::class,
+            ]);
+        }
     }
 }
