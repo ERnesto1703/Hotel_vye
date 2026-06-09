@@ -36,8 +36,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Skipping config, route and view cache during build (handled at runtime)
 # RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
 
-# Set proper permissions for storage and cache directories
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Set proper permissions for storage and cache directories (chown and chmod 777)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Expose port 80 (default for Apache)
 EXPOSE 80
